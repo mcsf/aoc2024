@@ -25,12 +25,12 @@ Directory structure
 Architecture
 -------
 
-Solutions can be written in any language. Multiple solutions may be provided for a single day, for fun. A solution must be a file whose name starts with `run` and is executable. [Shebangs](https://en.wikipedia.org/wiki/Shebang_(Unix)) determine how each program should be run. All programs, regardless of implementation language, must read puzzles from standard input and write the solution to standard output, one line per part of the puzzle.
+Solutions can be written in any language. Multiple solutions may be provided for a single day, for fun. A solution must be a file whose name starts with `run.` and is executable. [Shebangs](https://en.wikipedia.org/wiki/Shebang_(Unix)) determine how each program should be run. All programs, regardless of implementation language, must read puzzles from standard input and write the solution to standard output. Barring exceptions, the output should consist of two lines, one for each part of the puzzle.
 
-Calling:
+Calling a program with `STDIN` redirection:
 
 ```sh
-./run.awk < sample
+./run.py < sample
 ```
 
 Outputs:
