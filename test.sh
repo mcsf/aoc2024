@@ -4,6 +4,8 @@ test_day() {
 	day=$1
 	cd "$day" || exit 2
 
+	[ -f Makefile ] && make --quiet
+
 	# Capture output to flush all at once, since tests are run in parallel
 	out=$(mktemp)
 	echo "$day" > "$out"

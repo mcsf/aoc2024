@@ -23,7 +23,7 @@ Directory structure
 ```
 
 Architecture
--------
+------------
 
 Solutions can be written in any language. Multiple solutions may be provided for a single day, for fun. A solution must be a file whose name starts with `run.` and is executable. [Shebangs](https://en.wikipedia.org/wiki/Shebang_(Unix)) determine how each program should be run. All programs, regardless of implementation language, must read puzzles from standard input and write the solution to standard output. Barring exceptions, the output should consist of two lines, one for each part of the puzzle.
 
@@ -38,6 +38,19 @@ Outputs:
 ```
 1234  # solution to Part 1
 5678  # solution to Part 2
+```
+
+### Compiling from source
+
+When solving puzzles using a language that requires a compilation step, define the targets in a Makefile specific to that day. The test runner will handle the Makefile. Source files' names should match `source.<EXT>` and target binaries should match `run.<EXT>.bin`:
+
+```
+│
+├ 01          - Day 1
+│ ├ ...
+│ ├ source.c  - Source code for puzzle solver
+│ ├ Makefile  - Makefile specifying how to build from source
+│ └ run.c.bin - Binary produced by `make`
 ```
 
 
