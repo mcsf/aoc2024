@@ -4,7 +4,16 @@ from sys import stdin
 from re import split
 from operator import add, mul
 
-OPERATORS = [mul, add, lambda a, b: int(str(a) + str(b))]
+
+def concat(a, b):  # Faster than int(''.join(str(...
+    n = b
+    while n:
+        a *= 10
+        n //= 10
+    return a + b
+
+
+OPERATORS = [mul, add, concat]
 
 
 def is_solvable(target, operands, base=2):
