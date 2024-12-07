@@ -1,38 +1,34 @@
 #!/usr/bin/env python3
 
 from sys import stdin
-from operator import add
 
 # Build sets of Points and Obstacles
-P = set()  # type: set[tuple[int, int]]
-O = set()  # type: set[tuple[int, int]]  # noqa: E741
+P = set()  # type: set[complex]
+O = set()  # type: set[complex]  # noqa: E741
 for y, line in enumerate(stdin):
     for x, c in enumerate(line.strip()):
+        p = complex(x, y)
         if c == '^':
-            start = x, y  # Initial position
+            start = p
         elif c == '#':
-            O.add((x, y))
-        P.add((x, y))
-
-
-# Vector addition
-def vadd(*vs): return tuple(map(add, *vs))
+            O.add(p)
+        P.add(p)
 
 
 # Vary (x, y) according to rotation r
-ROT = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+ROT = [1, 1j, -1, -1j]
 
 # PART 1
 #
 # Capture all visited positions
 
-V = set()  # type: set[tuple[int, int]]
+V = set()  # type: set[complex]
 p = start  # initial position
 r = 3      # initial rotation, facing up
 
 while p in P:
     V.add(p)
-    if (ahead := vadd(p, ROT[r])) in O:
+    if (ahead := p + ROT[r]) in O:
         r = (r + 1) % 4
     else:
         p = ahead
@@ -45,18 +41,18 @@ count = 0
 
 for maybe_obstacle in V:
     # This time, track visits with rotation too
-    Vr = set()  # type: set[tuple[int, int, int]]
+    Vr = set()  # type: set[tuple[complex, int]]
     p = start
     r = 3
 
     O.add(maybe_obstacle)
 
     while p in P:
-        if (*p, r) in Vr:
+        if (p, r) in Vr:
             count += 1
             break
-        Vr.add((*p, r))
-        if (ahead := vadd(p, ROT[r])) in O:
+        Vr.add((p, r))
+        if (ahead := p + ROT[r]) in O:
             r = (r + 1) % 4
         else:
             p = ahead
