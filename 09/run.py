@@ -3,18 +3,14 @@
 from sys import stdin
 from dataclasses import dataclass
 from copy import deepcopy
+from multiprocessing import Pool, freeze_support
+from functools import partial
 
 
 @dataclass
 class Block:
     id: int
     size: int
-
-
-fs = []  # type: list[Block]
-for i, c in enumerate(next(stdin).strip()):
-    size = int(c)
-    fs.append(Block(i // 2 if i % 2 == 0 else - 1, size))
 
 
 def realloc_1(fs):
@@ -78,5 +74,17 @@ def checksum(fs):
     return s
 
 
-print(checksum(realloc_1(deepcopy(fs))))
-print(checksum(realloc_2(fs)))
+def task(fs, alloc_fn):
+    return checksum(alloc_fn(deepcopy(fs)))
+
+
+if __name__ == '__main__':
+    freeze_support()
+    pool = Pool()
+
+    fs = []  # type: list[Block]
+    for i, c in enumerate(next(stdin).strip()):
+        size = int(c)
+        fs.append(Block(i // 2 if i % 2 == 0 else - 1, size))
+
+    print(*pool.map(partial(task, fs), [realloc_1, realloc_2]), sep='\n')
