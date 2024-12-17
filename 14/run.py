@@ -2,6 +2,9 @@
 
 from sys import stdin
 from re import findall
+from itertools import count
+from math import prod
+from collections import Counter
 
 robots = []
 for line in stdin:
@@ -16,9 +19,6 @@ width, height = 101, 103
 # Detect sample puzzle and ajust dimensions
 if robots[0][0] == 4j:
     width, height = 11, 7
-
-mw = width // 2
-mh = height // 2
 
 
 def move(p, v):
@@ -63,35 +63,26 @@ def is_tree(robots):
     return False
 
 
-def draw(robots):
-    M = set(p for p, _ in robots)
-    for y in range(height):
-        for x in range(width):
-            print('#' if complex(x, y) in M else ' ', end='')
-        print('')
-
-
-for t in range(1, 1 + 1000000):
-    next_robots = []
-    for p, v in robots:
-        next_robots.append((move(p, v), v))
-    robots = next_robots
+for t in count(1):
+    robots = [(move(p, v), v) for p, v in robots]
 
     if t == 100:
-        q0 = q1 = q2 = q3 = 0
-        for p, _ in robots:
-            if p.real < mw and p.imag < mh:
-                q0 += 1
-            elif p.real > mw and p.imag < mh:
-                q1 += 1
-            elif p.real < mw and p.imag > mh:
-                q2 += 1
-            elif p.real > mw and p.imag > mh:
-                q3 += 1
-
-        print(q0 * q1 * q2 * q3)
+        mw, mh = width // 2, height // 2
+        # Boolean algebra, collections.Counter and math.prod? Totally overkill,
+        # but fun.
+        quadrants = Counter(((p.real > mw) | (p.imag > mh) << 1)
+                            for p, _ in robots
+                            if p.real != mw and p.imag != mh)
+        print(prod(quadrants.values()))
 
     if is_tree(robots):
         print(t)
         # draw(robots)
         break
+
+# def draw(robots):
+#     M = set(p for p, _ in robots)
+#     for y in range(height):
+#         for x in range(width):
+#             print('#' if complex(x, y) in M else ' ', end='')
+#         print('')
