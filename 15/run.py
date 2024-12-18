@@ -2,7 +2,7 @@
 
 from sys import stdin
 
-# Populate both the regular and the expand maps in one pass
+# Populate both the regular and the expanded maps in one pass
 grid_1 = {}
 grid_2 = {}
 for y, line in enumerate(stdin):
